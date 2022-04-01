@@ -72,9 +72,9 @@ function [P1, P2, P3] = define_triangle()
 % matriculation number: 'ABCDEFGH'
 
 % TODO: implement this function and store the results in 'P1', 'P2', and 'P3'
-P1 = [0, 0, 0];
-P2 = [0, 0, 0];
-P3 = [0, 0, 0];
+P1 = [ 9, -2, -9];
+P2 = [-4, -2,  8];
+P3 = [-1,  3, -2];
 
 end
 
@@ -86,9 +86,10 @@ function [P1P2, P2P3, P3P1] = define_edges(P1, P2, P3)
 
 % TODO: implement this function and store the results in 'P1P2', 'P2P3',
 % and 'P3P1'
-P1P2 = [0, 0, 0];
-P2P3 = [0, 0, 0];
-P3P1 = [0, 0, 0];
+
+P1P2 = [P2(1)-P1(1), P2(2)-P1(2), P2(3)-P1(3)];
+P2P3 = [P3(1)-P2(1), P3(2)-P2(2), P3(3)-P2(3)];
+P3P1 = [P1(1)-P3(1), P1(2)-P3(2), P1(3)-P3(3)];
 
 end
 
@@ -101,7 +102,9 @@ function length = compute_length(edge)
 % get by using the built-in Matlab function 'norm'.
 
 % TODO: implement this function and store the result in 'length'
-length = 0;
+
+length = sqrt(edge(1)^2+edge(2)^2+edge(3)^2);
+
 
 end
 
@@ -113,8 +116,9 @@ function [normal, normalized_normal] = compute_normal(P1P2, P2P3, P3P1)
 
 % TODO: implement this function and store the results in 'normal' and
 % 'normalized_normal'
-normal = [0, 0, 0];
-normalized_normal = [0, 0, 0];
+
+normal = [cross(P3P1,P2P3)];
+normalized_normal = norm(cross(P3P1,P2P3))./cross(P3P1,P2P3);
 
 end
 
@@ -125,7 +129,11 @@ function Area = compute_area(normal)
 % Beware of the direction of your vectors!
 
 % TODO: implement this function and store the result in 'Area'
-Area = 0;
+
+Area = norm(normal);
+
+% Nein die Richtung hat keinen Einfluss, da negative Vorzeichen durch
+% das Quadrieren eliminiert werden.
 
 end
 
@@ -145,14 +153,15 @@ function [alpha, beta, gamma, angles_sum, angles_min, angles_max, ...
 
 % TODO: implement this function and store the result in the corresponding
 % variables
-alpha = 0;
-beta = 0;
-gamma = 0;
+
+alpha = acosd(dot( P1P2,-P3P1)/(norm(P1P2)*norm(P3P1)));
+beta  = acosd(dot(-P1P2, P2P3)/(norm(P1P2)*norm(P2P3)));
+gamma = acosd(dot(-P2P3, P3P1)/(norm(P2P3)*norm(P3P1)));
 
 % HINT: check the sum
-angles_sum = 0;
-angles_max = 0;
-angles_min = 0;
-angles_avg = 0;
+angles_sum = sum([alpha,beta,gamma])
+angles_max = max([alpha,beta,gamma])
+angles_min = min([alpha,beta,gamma])
+angles_avg = mean([alpha,beta,gamma])
 
 end

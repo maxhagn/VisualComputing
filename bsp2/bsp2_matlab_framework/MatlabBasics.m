@@ -36,23 +36,13 @@ fnc_handles.Matrix_Xc_Matrix = @Matrix_Xc_Matrix;
 % Implement this task in the function 'data_structures'.
 [v1, v2, M] = data_structures();
 
-v1 = [0;1;8]
-v2 = [2,1,8]
-M  = [0,1,8;1,3,1;8,7,2]
-
 % 2) create a sequence
 % Implement this task in the function 'sequence_operator'.
 v3 = sequence_operator(M);
-v3 = [min(min(M)):0.25:max(max(M))]
 
 % 3) create a 15-by-9 Matrix 'M_15x9' containing a checkerboard pattern
 % Implement this task in the function 'checkerboard'.
 M_15x9 = checkerboard(M);
-M_Zeros = zeros(3,3)
-M = repmat(M M_Zeros,5,3)
-%M_Matrikelnummer = [0,1,8;1,3,1;8,7,2]
-
-%M_15x9 = [M_Matrikelnummer, M_Zeros, M_Matrikelnummer;]
 
 %% II. implement your own versions of the following built-in Matlab functions:
 % *, .*, cross, dot
@@ -113,9 +103,9 @@ function [v1, v2, M] = data_structures()
 %      E     H     F
 
 % TODO: implement this function and store the output in 'v1', 'v2', and 'M'
-v1 = 0;
-v2 = 0;
-M = 0;
+v1 = [0;1;8];
+v2 = [2,1,8];
+M  = [0,1,8;1,3,1;8,7,2];
 
 end
 
@@ -133,7 +123,7 @@ function v3 = sequence_operator(M)
 % help :
 
 % TODO: implement this function and store the output in 'v3'
-v3 = M;
+v3 = min(min(M)):0.25:max(max(M));
 
 end
 
@@ -171,7 +161,10 @@ function M_15x9 = checkerboard(M)
 %   EHF 000 EHF
 
 % TODO: implement this function and store the output in 'M_15x9'
-M_15x9 = M;
+M_15x9 = repmat(M,5,3);
+M_15x9([4:6 10:12],1:3) = 0;
+M_15x9([1:3 7:9 13:15],4:6) = 0;
+M_15x9([4:6 10:12],7:9) = 0;
 
 end
 
@@ -181,7 +174,7 @@ function[result] = dotProduct(v1, v2)
 % do this!!! Implement it yourself and then compare it with 'dot'.
 
 % TODO: implement this function and store the output in 'result'
-result = v1;
+result = v1(1)*v2(1) + v1(2)*v2(2) + v1(3)*v2(3);
 
 end
 
@@ -191,9 +184,15 @@ function[result] = crossProduct(v1, v2)
 % Implement it yourself and then compare it with 'cross'.
 
 % TODO: implement this function and store the output in 'result'
-result = v1;
+
+value_1 = v1(2)*v2(3) - v1(3)*v2(2);
+value_2 = v1(3)*v2(1) - v1(1)*v2(3);
+value_3 = v1(1)*v2(2) - v1(2)*v2(1);
+
+result = [value_1,value_2,value_3];
 
 end
+
 
 function[result] = vector_X_Matrix(v2, M)
 % implement vector matrix multiplication
@@ -202,7 +201,12 @@ function[result] = vector_X_Matrix(v2, M)
 % HINT: return a row vector
 
 % TODO: implement this function and store the output in 'result'
-result = M;
+
+value_1 = v2(1)*M(1,1)+v2(2)*M(2,1)+v2(3)*M(3,1);
+value_2 = v2(1)*M(1,2)+v2(2)*M(2,2)+v2(3)*M(3,2);
+value_3 = v2(1)*M(1,3)+v2(2)*M(2,3)+v2(3)*M(3,3);
+
+result = [value_1,value_2,value_3];
 
 end
 
@@ -213,7 +217,13 @@ function[result] = Matrix_X_vector(M, v1)
 % HINT: return a column vector
 
 % TODO: implement this function and store the output in 'result'
-result = M;
+
+value_1 = M(1,1)*v1(1)+M(1,2)*v1(2)+M(1,3)*v1(3);
+value_2 = M(2,1)*v1(1)+M(2,2)*v1(2)+M(2,3)*v1(3);
+value_3 = M(3,1)*v1(1)+M(3,2)*v1(2)+M(3,3)*v1(3);
+
+result = [value_1;value_2;value_3];
+
 
 end
 
@@ -224,7 +234,20 @@ function[result] = Matrix_X_Matrix(M, M2)
 % HINT: row times column!
 
 % TODO: implement this function and store the output in 'result'
-result = M;
+
+rows = 3;
+cols = 3;
+
+result = zeros(rows, cols);
+for row = 1 : rows
+  for col = 1 : cols
+    sum = 0;
+    for i = 1 : cols
+      sum = sum + M(row, i) * M2(i, col);
+    end
+    result(row, col) = sum;
+  end
+end
 
 end
 
@@ -233,6 +256,15 @@ function[result] = Matrix_Xc_Matrix(M, M2)
 % IMPORTANT: DON'T use the built-in Matlab operator '.*' to do this!!!
 
 % TODO: implement this function and store the output in 'result'
-result = M;
+
+rows = 3;
+cols = 3;
+result = zeros(rows,cols);
+
+for row = 1 : rows
+  for col = 1 : cols
+    result(row, col) = M(row,col) * M2(row,col);
+  end
+end
 
 end

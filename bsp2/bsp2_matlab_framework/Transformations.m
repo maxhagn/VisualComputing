@@ -52,8 +52,11 @@ function[matrix] = mtranslate(tx, ty)
 % tx, ty: translation along x and y
 
 % TODO: Implement this function
-matrix = [];
-
+matrix = [ 
+           1, 0, tx;
+           0, 1, ty;
+           0, 0,  1 
+         ];
 end
 
 function[matrix] = mrotate(angle)
@@ -61,7 +64,11 @@ function[matrix] = mrotate(angle)
 % angle: rotation angle in degrees
 
 % TODO: Implement this function
-matrix = [];
+matrix = [ 
+           cosd(angle),-sind(angle), 0;
+           sind(angle), cosd(angle), 0;
+                     0,           0, 1 
+         ];
 
 end
 
@@ -70,7 +77,11 @@ function[matrix] = mscale(sx, sy)
 % sx, sy: scaling in x and y direction
 
 % TODO: Implement this function
-matrix = [];
+matrix = [ 
+           sx,  0, 0;
+            0, sy, 0;
+            0,  0, 1 
+         ];
 
 end
 

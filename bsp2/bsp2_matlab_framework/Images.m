@@ -33,21 +33,21 @@ output_path = 'mandrill_output.png';
 
 %% I. Images basics
 % 1) Load image from 'input_path' and store it in 'image'
-image = []; % TODO: edit this line
+image = imread(input_path); % TODO: edit this line
 
 % 2) Convert the image from 1) to double format with range [0, 1]. DO NOT USE LOOPS.
-image_double = []; % TODO: edit this line
+image_double = im2double(image); % TODO: edit this line
 
 % 3) Swap the channels of an image
 % Implement this task in the function 'swap_channels'.
 image_swapped = swap_channels(image_double);
 
 % 4) Display the swapped image
-% TODO: Add your code here
+imshow(image_swapped)
 
 % 5) Write the swapped image to the path specified in output_path. The
 % image should be in png format.
-% TODO: Add your code here
+imwrite(image_swapped, output_path);
 
 % 6) Logical images
 % Implement this task in the function 'mark_green'.
@@ -66,7 +66,7 @@ image_reshaped = reshape_image(image_double);
 % 1) Use fspecial to create a 5x5 gaussian filter with sigma=2.0 and store
 % it in 'gauss_kernel'
 % TODO: edit the next line
-gauss_kernel = [0, 0, 0, 0, 0; 0, 0, 0, 0, 0; 0, 0, 0, 0, 0; 0, 0, 0, 0, 0; 0, 0, 0, 0, 0];
+gauss_kernel = fspecial("gaussian",[5 5],2);
 
 % 2) Implement the function 'evc_filter'.
 image_convoluted = evc_filter(image_swapped, gauss_kernel);
@@ -83,7 +83,8 @@ function image_swapped = swap_channels(image_double)
 % stored in 'image_swapped'. DO NOT USE LOOPS.
 
 % TODO: implement this function
-image_swapped = image_double;
+
+image_swapped = image_double(:,:,[2 1 3]);
 
 end
 
@@ -96,7 +97,8 @@ function image_mark_green = mark_green(image_double)
 % see http://de.mathworks.com/help/matlab/matlab_prog/find-array-elements-that-meet-a-condition.html).
 
 % TODO: implement this function
-image_mark_green = image_double;
+
+image_mark_green = image_double(:,:,2) >= 0.7; 
 
 end
 
@@ -108,6 +110,8 @@ function image_masked = mask_image(image_double, image_mark_green)
 
 % TODO: implement this function
 image_masked = image_double;
+repmat_image = repmat(image_mark_green, 1, 1, 3);
+image_masked(repmat_image) = 0;
 
 end
 
@@ -119,7 +123,12 @@ function image_reshaped = reshape_image(image_double)
 % HINT: Matlab adresses matrices with "height x width"
 
 % TODO: implement this function
-image_reshaped = image_double;
+image_greyscale = rgb2gray(image_double);
+
+image_left  = image_greyscale(:, 1:end/2);
+image_right = image_greyscale(:, end/2+1:end);
+
+image_reshaped = [image_right;image_left];
 
 end
 
@@ -134,7 +143,21 @@ function [result] = evc_filter(input, kernel)
 % The output image should have the same size as the input image.
 
 % TODO: Add your code here
-result = input;
+
+rows = size(input,1);
+cols = size(input,2);
+result = zeros(rows,cols);
+
+input=padarray(input,[1,1]);
+
+for color = 1:3 
+    for i = 3:rows
+        for j = 3:cols
+            temp = input(i-2:i+2,j-2:j+2,color) .* kernel;
+            result(i-1,j-1,color) = sum(temp(:));
+        end
+    end
+end
 
 end
 
@@ -149,6 +172,7 @@ function image_edge = edge_filter(image_reshaped)
 % border replication, etc.) Take a look at the imfilter documentation.
 
 % TODO: implement this function
-image_edge = image_reshaped;
+kernel = fspecial('sobel');
+image_edge = imfilter(image_reshaped, kernel);
 
 end
