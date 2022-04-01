@@ -35,10 +35,10 @@ display_vertices(rotated_vertices, 12, 'Rotated Quad');
 % 4) Edit the next 4 lines and use the implemented functions to produce
 % the Target Images 1-4 (see instructions) and display them.
 % Please recall that you are supposed to call the transform_vertices function only once per image.
-image1_vertices = quad; % TODO: edit this
-image2_vertices = quad; % TODO: edit this
-image3_vertices = quad; % TODO: edit this
-image4_vertices = quad; % TODO: edit this
+image1_vertices = transform_vertices(quad, (mtranslate(-3,0)*mrotate(55)));
+image2_vertices = transform_vertices(quad, (mrotate(55)*mtranslate(-3,0))); 
+image3_vertices = transform_vertices(quad, (mtranslate(3,1)*mrotate(70)*mscale(3,2))); 
+image4_vertices = transform_vertices(quad, (mscale(1,3)*mrotate(45))); 
 
 display_vertices(image1_vertices, 13, 'Target Image 1');
 display_vertices(image2_vertices, 14, 'Target Image 2');
@@ -105,7 +105,13 @@ hold on;
 plot([-100, 100], [0, 0], '-g');
 plot([0, 0], [-100, 100], '-g');
 
+
 % TODO: Display the vertices (v) using the plot function
+plot(v(1,1:2),v(2,1:2), '-b')
+plot(v(1,2:3),v(2,2:3), '-b')
+plot(v(1,3:4),v(2,3:4), '-b')
+plot(v(1,4:5),v(2,4:5), '-b')
+
 
 %Finish drawing
 hold off;
@@ -119,6 +125,12 @@ function[result] = transform_vertices(v, m)
 % Returns a list of transformed vertices of the same size as v
 
 % TODO: Implement this function
-result = v;
+
+cols = size(v,2);
+
+for i = 1:cols 
+    m * [v(1,i);v(2,i);v(3,i)]
+    result(1:3,i) = m * [v(1,i);v(2,i);v(3,i)]
+end
 
 end
