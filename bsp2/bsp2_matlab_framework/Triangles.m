@@ -86,7 +86,6 @@ function [P1P2, P2P3, P3P1] = define_edges(P1, P2, P3)
 
 % TODO: implement this function and store the results in 'P1P2', 'P2P3',
 % and 'P3P1'
-
 P1P2 = [P2(1)-P1(1), P2(2)-P1(2), P2(3)-P1(3)];
 P2P3 = [P3(1)-P2(1), P3(2)-P2(2), P3(3)-P2(3)];
 P3P1 = [P1(1)-P3(1), P1(2)-P3(2), P1(3)-P3(3)];
@@ -102,7 +101,6 @@ function length = compute_length(edge)
 % get by using the built-in Matlab function 'norm'.
 
 % TODO: implement this function and store the result in 'length'
-
 length = sqrt(edge(1)^2+edge(2)^2+edge(3)^2);
 
 
@@ -116,9 +114,8 @@ function [normal, normalized_normal] = compute_normal(P1P2, P2P3, P3P1)
 
 % TODO: implement this function and store the results in 'normal' and
 % 'normalized_normal'
-
-normal = [cross(P3P1,P2P3)];
-normalized_normal = norm(cross(P3P1,P2P3))./cross(P3P1,P2P3);
+normal = cross(P3P1,P2P3);
+normalized_normal = normal/norm(normal);
 
 end
 
@@ -129,7 +126,6 @@ function Area = compute_area(normal)
 % Beware of the direction of your vectors!
 
 % TODO: implement this function and store the result in 'Area'
-
 Area = norm(normal);
 
 % Nein die Richtung hat keinen Einfluss, da negative Vorzeichen durch
@@ -153,15 +149,14 @@ function [alpha, beta, gamma, angles_sum, angles_min, angles_max, ...
 
 % TODO: implement this function and store the result in the corresponding
 % variables
-
 alpha = acosd(dot( P1P2,-P3P1)/(norm(P1P2)*norm(P3P1)));
 beta  = acosd(dot(-P1P2, P2P3)/(norm(P1P2)*norm(P2P3)));
 gamma = acosd(dot(-P2P3, P3P1)/(norm(P2P3)*norm(P3P1)));
 
 % HINT: check the sum
-angles_sum = sum([alpha,beta,gamma])
-angles_max = max([alpha,beta,gamma])
-angles_min = min([alpha,beta,gamma])
-angles_avg = mean([alpha,beta,gamma])
+angles_sum = sum([alpha,beta,gamma]);
+angles_max = max([alpha,beta,gamma]);
+angles_min = min([alpha,beta,gamma]);
+angles_avg = mean([alpha,beta,gamma]);
 
 end

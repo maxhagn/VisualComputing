@@ -83,7 +83,6 @@ function image_swapped = swap_channels(image_double)
 % stored in 'image_swapped'. DO NOT USE LOOPS.
 
 % TODO: implement this function
-
 image_swapped = image_double(:,:,[2 1 3]);
 
 end
@@ -97,7 +96,6 @@ function image_mark_green = mark_green(image_double)
 % see http://de.mathworks.com/help/matlab/matlab_prog/find-array-elements-that-meet-a-condition.html).
 
 % TODO: implement this function
-
 image_mark_green = image_double(:,:,2) >= 0.7; 
 
 end
@@ -151,10 +149,10 @@ result = zeros(rows,cols);
 input=padarray(input,[1,1]);
 
 for color = 1:3 
-    for i = 3:rows
-        for j = 3:cols
-            temp = input(i-2:i+2,j-2:j+2,color) .* kernel;
-            result(i-1,j-1,color) = sum(temp(:));
+    for row = 3:rows
+        for col = 3:cols
+            temp = input(row-2:row+2,col-2:col+2,color) .* kernel;
+            result(row-1,col-1,color) = sum(temp(:));
         end
     end
 end

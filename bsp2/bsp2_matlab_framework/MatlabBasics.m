@@ -184,7 +184,6 @@ function[result] = crossProduct(v1, v2)
 % Implement it yourself and then compare it with 'cross'.
 
 % TODO: implement this function and store the output in 'result'
-
 value_1 = v1(2)*v2(3) - v1(3)*v2(2);
 value_2 = v1(3)*v2(1) - v1(1)*v2(3);
 value_3 = v1(1)*v2(2) - v1(2)*v2(1);
@@ -201,7 +200,6 @@ function[result] = vector_X_Matrix(v2, M)
 % HINT: return a row vector
 
 % TODO: implement this function and store the output in 'result'
-
 value_1 = v2(1)*M(1,1)+v2(2)*M(2,1)+v2(3)*M(3,1);
 value_2 = v2(1)*M(1,2)+v2(2)*M(2,2)+v2(3)*M(3,2);
 value_3 = v2(1)*M(1,3)+v2(2)*M(2,3)+v2(3)*M(3,3);
@@ -217,7 +215,6 @@ function[result] = Matrix_X_vector(M, v1)
 % HINT: return a column vector
 
 % TODO: implement this function and store the output in 'result'
-
 value_1 = M(1,1)*v1(1)+M(1,2)*v1(2)+M(1,3)*v1(3);
 value_2 = M(2,1)*v1(1)+M(2,2)*v1(2)+M(2,3)*v1(3);
 value_3 = M(3,1)*v1(1)+M(3,2)*v1(2)+M(3,3)*v1(3);
@@ -234,7 +231,6 @@ function[result] = Matrix_X_Matrix(M, M2)
 % HINT: row times column!
 
 % TODO: implement this function and store the output in 'result'
-
 rows = 3;
 cols = 3;
 
@@ -256,7 +252,6 @@ function[result] = Matrix_Xc_Matrix(M, M2)
 % IMPORTANT: DON'T use the built-in Matlab operator '.*' to do this!!!
 
 % TODO: implement this function and store the output in 'result'
-
 rows = 3;
 cols = 3;
 result = zeros(rows,cols);

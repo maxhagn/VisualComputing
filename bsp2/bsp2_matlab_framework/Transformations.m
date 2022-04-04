@@ -125,12 +125,12 @@ function[result] = transform_vertices(v, m)
 % Returns a list of transformed vertices of the same size as v
 
 % TODO: Implement this function
-
+rows = size(v,1);
 cols = size(v,2);
+result = zeros(rows, cols);
 
 for i = 1:cols 
-    m * [v(1,i);v(2,i);v(3,i)]
-    result(1:3,i) = m * [v(1,i);v(2,i);v(3,i)]
+    result(1:3,i) = m * [v(1,i);v(2,i);v(3,i)];
 end
 
 end
