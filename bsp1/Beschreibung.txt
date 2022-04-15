@@ -1,0 +1,13 @@
+Allgemein
+Das Bild wurde mit einem iPhone 12 Pro im normalen Kameramodus aufgenommen und mit dem GNU Image Manipulation Program (GIMP) bearbeitet. 
+
+Vorgehensweise
+Zuerst wurden die Konturen meiner Hündin, die im Mittelpunkt des Bildes stehen soll, mit Hilfe des "Freie Auswahl"-Tools ausgewählt. Anschließend konnte die Auswahl invertiert werden. Schlussendlich wurde auf die Auswahl der Gaußsche Weichzeichner angewendet. Als Einstellungen wurden die X- und Y-Größe auf 3,5, der Filter auf "FIR" und die Abyss-Regeln auf Klemmen gewählt. Die X- und Y-Größe geben dabei die Stärke des Weichzeichners an [1]. Durch die Auswahl "FIR" wird der Filter mit endlicher Impulsantwort verwendet, wobei dieser Filter vor allem für Bilder mit einer großen Anzahl verschiedener Farben eingesetzt wird [1]. Durch die Auswahl Klemmen der Abyss-Regeln wird "jede Kante der transformierten Ebene unendlich ausgedehnt" [2].
+
+Gaußscher Weichzeichner
+Bei der Anwendung des Gauß'schen Weichzeichners wird die Farbe eines Pixels jeweils durch den Mittelwert der Farben der umliegenden Pixel gebildet. Die Anzahl der umliegenden Pixel die für die Berechnung herangezogen werden, kann in GIMP mit der X- und Y-Größe bestimmt werden. In diesem Anwendungsfall wurde für beide Richtungen 3,5 Pixel ausgewählt [3].  
+
+[1] https://docs.gimp.org/2.10/de/gimp-filter-gaussian-blur.html, zuletzt aufgerufen: 13.03.2022 18:30
+[2] https://docs.gimp.org/2.10/de/gimp-tool-warp.html#abyss-policy, zuletzt aufgerufen: 13.03.2022 18:40
+[3] https://docs.gimp.org/2.8/de/plug-in-gauss.html, zuletzt aufgerufen: 13.03.2022 18:45
+
