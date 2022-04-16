@@ -18,6 +18,7 @@ fnc_concat = @(R, G, B) evc_concat(R, G, B);
 [R, G, B] = evc_transform_neutral(R, G, B, asShotNeutral);
 [R, G, B] = evc_interpolate(R, G, B);
 result = evc_concat(R, G, B);
+
 end
 
 function [R, G, B] = evc_demosaic_pattern(input)
@@ -44,6 +45,11 @@ R = zeros(size(input));
 G = zeros(size(input));
 B = zeros(size(input));
 
+R(1:2:end,1:2:end) = input(1:2:end,1:2:end);
+B(2:2:end,2:2:end) = input(2:2:end,2:2:end);
+G(1:2:end,2:2:end) = input(1:2:end,2:2:end);
+G(2:2:end,1:2:end) = input(2:2:end,1:2:end);
+
 end
 
 function [R, G, B] = evc_transform_neutral(R, G, B, asShotNeutral)
@@ -66,9 +72,9 @@ function [R, G, B] = evc_transform_neutral(R, G, B, asShotNeutral)
 % NOTE: The following three lines can be removed. They prevent the framework
 %       from crashing.
 
-R = zeros(size(R));
-G = zeros(size(G));
-B = zeros(size(B));
+R = R/asShotNeutral(1);
+G = G/asShotNeutral(2);
+B = B/asShotNeutral(3);
 
 end
 
@@ -91,9 +97,13 @@ function [R, G, B] = evc_interpolate(R, G, B)
 % NOTE: The following three lines can be removed. They prevent the framework
 %       from crashing.
 
-R = zeros(size(R));
-G = zeros(size(G));
-B = zeros(size(B));
+R_Filter = [0,0.25,0;0.25,1,0.25;0,0.25,0];
+G_Filter = [0,0.25,0;0.25,1,0.25;0,0.25,0];
+B_Filter = [0,0.25,0;0.25,1,0.25;0,0.25,0];
+
+R = imfilter(R, R_Filter);
+G = imfilter(G, G_Filter);
+B = imfilter(B, B_Filter);
 
 end
 
@@ -114,6 +124,7 @@ function [result] = evc_concat(R, G, B)
 % NOTE: The following line can be removed. It prevents the framework
 %       from crashing.
 
-result = zeros([size(R, 1), size(R, 2), 3]);
+result = cat(3,R,G,B);
+
 
 end

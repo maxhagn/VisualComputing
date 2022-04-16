@@ -40,7 +40,10 @@ function [brightness] = evc_compute_brightness(input)
 % TODO: Implement this function.
 % HINT: The function 'rgb2gray' might be useful.
 
-brightness = ones(size(input));
+maxValue = max(max(max(input)));
+normalized = input .* 1/maxValue;
+gray = rgb2gray(normalized);
+brightness = gray .* maxValue;
 
 end
 
@@ -61,7 +64,8 @@ function [chromaticity] = evc_compute_chromaticity(input, brightness)
 % NOTE: The following line can be removed. It prevents the framework
 %       from crashing.
 
-chromaticity = input;
+brightness = repmat(brightness, [1 1 3]);
+chromaticity = input/brightness;
 
 end
 
