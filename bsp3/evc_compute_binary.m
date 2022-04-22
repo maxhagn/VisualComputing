@@ -27,6 +27,17 @@ function [result] = evc_compute_binary(input, x, top)
 % NOTE: The following line can be removed. It prevents the framework from
 %       crashing.
 
-result = input;
+high = 1.0;
+low = 0.0;
+
+if (top == 0)
+    high = 0.0;
+    low = 1.0;
+end
+
+input(input > x) = high;   
+input(input <= x) = low;
+
+result = double(input);
 
 end

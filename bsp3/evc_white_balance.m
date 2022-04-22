@@ -21,19 +21,29 @@ function [result] = evc_white_balance(input, white)
 % NOTE: The following line can be removed. It prevents the framework
 %       from crashing.
 
-redChannel = input(:, :, 1);
-greenChannel = input(:, :, 2);
-blueChannel = input(:, :, 3);
+rScale = 1 / 0.0000000001;
+if white(1) ~= 0
+    rScale = 1 / white(1);
+end
 
-meanR = mean2(redChannel);
-meanG = mean2(greenChannel);
-meanB = mean2(blueChannel);
-meanGray = mean2(white)
+gScale = 1 / 0.0000000001;
+if white(2) ~= 0
+    gScale = 1 / white(2);
+end
 
-redChannel = uint8(double(redChannel) * meanGray / meanR);
-greenChannel = uint8(double(greenChannel) * meanGray / meanG);
-blueChannel = uint8(double(blueChannel) * meanGray / meanB);
+bScale = 1 / 0.0000000001;
+if white(3) ~= 0
+    bScale = 1 / white(3);
+end
 
-result = cat(3, redChannel, greenChannel, blueChannel);
+R = input(:, :, 1);
+G = input(:, :, 2);
+B = input(:, :, 3);
+
+R = R * rScale;
+G = G * gScale;
+B = B * bScale;
+
+result = cat(3, R, G, B);
 
 end

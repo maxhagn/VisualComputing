@@ -60,8 +60,7 @@ function [result] = evc_transform_colors(input, blackLevel)
 %NOTE:  The following line can be removed. It prevents the framework
 %       from crashing.
 
-doubleImage = im2double(input);
-transformed = (doubleImage-blackLevel) ./ (65535 - blackLevel);
-result = im2double(input);
+result = (double(input)-blackLevel)/(65535 - blackLevel);
+result(result<0)=0;
 
 end

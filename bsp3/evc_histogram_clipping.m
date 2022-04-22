@@ -39,6 +39,15 @@ function [newLow, newHigh] = evc_prepare_histogram_range(input, low, high)
 % NOTE: The following two lines can be removed. They prevent the
 %       framework from crashing.
 
+if low < 0
+    low = 0;
+end
+
+maxInt = max(input(:));
+if high > maxInt
+    high = maxInt;
+end
+
 newLow = low;
 newHigh = high;
 
@@ -64,7 +73,7 @@ function [result] = evc_transform_histogram(input, newLow, newHigh)
 % NOTE: The following line can be removed. It prevents the framework
 %       from crashing.
 
-result = input;
+result = (input - newLow) / (newHigh - newLow);
 
 end
 
@@ -81,6 +90,9 @@ function [result] = evc_clip_histogram(img)
 % TODO:	Implement this function.
 % NOTE: The following line can be removed. It prevents the framework
 %       from crashing.
+
+img(img < 0) = 0;
+img(img > 1) = 1;
 
 result = img;
 

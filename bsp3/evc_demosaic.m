@@ -41,14 +41,35 @@ function [R, G, B] = evc_demosaic_pattern(input)
 % NOTE: The following three lines can be removed. They prevent the framework
 %       from crashing.
 
+% GBRG
+
 R = zeros(size(input));
 G = zeros(size(input));
 B = zeros(size(input));
 
-R(1:2:end,1:2:end) = input(1:2:end,1:2:end);
-B(2:2:end,2:2:end) = input(2:2:end,2:2:end);
-G(1:2:end,2:2:end) = input(1:2:end,2:2:end);
-G(2:2:end,1:2:end) = input(2:2:end,1:2:end);
+% RGGB
+% R(1:2:end, 1:2:end) = input(1:2:end, 1:2:end); % 1...red
+% B(2:2:end, 2:2:end) = input(2:2:end, 2:2:end); % 1...blue
+% G(2:2:end, 1:2:end) = input(2:2:end, 1:2:end); % 1...green
+% G(1:2:end, 2:2:end) = input(1:2:end, 2:2:end); % 1...green
+
+% BGGR
+% R(2:2:end, 2:2:end) = input(2:2:end, 2:2:end); % 1...red
+% B(1:2:end, 1:2:end) = input(1:2:end, 1:2:end); % 1...blue
+% G(2:2:end, 1:2:end) = input(2:2:end, 1:2:end); % 1...green
+% G(1:2:end, 2:2:end) = input(1:2:end, 2:2:end); % 1...green
+
+% GRBG
+B(2:2:end, 1:2:end) = input(2:2:end, 1:2:end); % 1...red
+R(1:2:end, 2:2:end) = input(1:2:end, 2:2:end); % 1...blue
+G(1:2:end, 1:2:end) = input(1:2:end, 1:2:end); % 1...green
+G(2:2:end, 2:2:end) = input(2:2:end, 2:2:end); % 1...green
+
+% GBRG
+% R(1:2:end, 1:2:end) = input(1:2:end, 1:2:end); % 1...red
+% B(2:2:end, 2:2:end) = input(2:2:end, 2:2:end); % 1...blue
+% G(2:2:end, 1:2:end) = input(2:2:end, 1:2:end); % 1...green
+% G(1:2:end, 2:2:end) = input(1:2:end, 2:2:end); % 1...green
 
 end
 
@@ -97,9 +118,17 @@ function [R, G, B] = evc_interpolate(R, G, B)
 % NOTE: The following three lines can be removed. They prevent the framework
 %       from crashing.
 
-R_Filter = [0,0.25,0;0.25,1,0.25;0,0.25,0];
-G_Filter = [0,0.25,0;0.25,1,0.25;0,0.25,0];
-B_Filter = [0,0.25,0;0.25,1,0.25;0,0.25,0];
+R_Filter = [0.25, 0.5,  0.25;
+            0.5,  1,    0.5;
+            0.25, 0.5,  0.25];
+
+G_Filter = [0,    0.25, 0;
+            0.25, 1,    0.25;
+            0,    0.25, 0];
+
+B_Filter = [0.25, 0.5,  0.25;
+            0.5,  1,    0.5;
+            0.25, 0.5,  0.25];
 
 R = imfilter(R, R_Filter);
 G = imfilter(G, G_Filter);
@@ -125,6 +154,5 @@ function [result] = evc_concat(R, G, B)
 %       from crashing.
 
 result = cat(3,R,G,B);
-
 
 end
