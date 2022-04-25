@@ -34,6 +34,7 @@ function [blackLevel, asShotNeutral] = evc_read_file_info(filename)
 %       framework from crashing.
 
 image_info = imfinfo(filename);
+
 blackLevel = image_info.BlackLevel;
 asShotNeutral = image_info.AsShotNeutral;
 
@@ -61,9 +62,13 @@ function [result] = evc_transform_colors(input, blackLevel)
 %       from crashing.
 
 max_sample_value = 65535;
+
 image_double = double(input);
 
-result = (image_double - blackLevel) / (max_sample_value - blackLevel);
-result(result < 0) = 0;
+image_transformed = (image_double - blackLevel) / (max_sample_value - blackLevel);
+
+image_transformed(image_transformed < 0) = 0;
+
+result = image_transformed;
 
 end

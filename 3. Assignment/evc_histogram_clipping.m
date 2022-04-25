@@ -74,7 +74,9 @@ function [result] = evc_transform_histogram(input, newLow, newHigh)
 % NOTE: The following line can be removed. It prevents the framework
 %       from crashing.
 
-result = (input - newLow) / (newHigh - newLow);
+image_transformed = (input - newLow) / (newHigh - newLow);
+
+result = image_transformed;
 
 end
 

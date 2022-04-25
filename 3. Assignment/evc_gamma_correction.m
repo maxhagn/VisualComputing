@@ -46,11 +46,11 @@ if (max_color_value <= 0.0000000001)
         max_color_value = 0.0000000001;
 end
 
-normalized_image = input .* (1/max_color_value);
+image_normalized = input .* (1/max_color_value);
 
-gray_image = rgb2gray(normalized_image);
+image_gray = rgb2gray(image_normalized);
 
-brightness = gray_image .* max_color_value;
+brightness = image_gray .* max_color_value;
 
 end
 
@@ -72,6 +72,7 @@ function [chromaticity] = evc_compute_chromaticity(input, brightness)
 %       from crashing.
 
 brightness = repmat(brightness, [1 1 3]);
+
 chromaticity = input ./ brightness;
 
 end
