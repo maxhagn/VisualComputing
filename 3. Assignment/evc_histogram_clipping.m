@@ -39,13 +39,14 @@ function [newLow, newHigh] = evc_prepare_histogram_range(input, low, high)
 % NOTE: The following two lines can be removed. They prevent the
 %       framework from crashing.
 
-if low < 0
+if (low < 0)
     low = 0;
 end
 
-maxInt = max(input(:));
-if high > maxInt
-    high = maxInt;
+max_color_value = max(max(max(input)));
+
+if (high > max_color_value)
+    high = max_color_value;
 end
 
 newLow = low;

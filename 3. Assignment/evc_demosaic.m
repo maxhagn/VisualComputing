@@ -41,35 +41,15 @@ function [R, G, B] = evc_demosaic_pattern(input)
 % NOTE: The following three lines can be removed. They prevent the framework
 %       from crashing.
 
-% GBRG
-
 R = zeros(size(input));
 G = zeros(size(input));
 B = zeros(size(input));
 
-% RGGB
-% R(1:2:end, 1:2:end) = input(1:2:end, 1:2:end); % 1...red
-% B(2:2:end, 2:2:end) = input(2:2:end, 2:2:end); % 1...blue
-% G(2:2:end, 1:2:end) = input(2:2:end, 1:2:end); % 1...green
-% G(1:2:end, 2:2:end) = input(1:2:end, 2:2:end); % 1...green
-
-% BGGR
-% R(2:2:end, 2:2:end) = input(2:2:end, 2:2:end); % 1...red
-% B(1:2:end, 1:2:end) = input(1:2:end, 1:2:end); % 1...blue
-% G(2:2:end, 1:2:end) = input(2:2:end, 1:2:end); % 1...green
-% G(1:2:end, 2:2:end) = input(1:2:end, 2:2:end); % 1...green
-
-% GRBG
-B(2:2:end, 1:2:end) = input(2:2:end, 1:2:end); % 1...red
-R(1:2:end, 2:2:end) = input(1:2:end, 2:2:end); % 1...blue
-G(1:2:end, 1:2:end) = input(1:2:end, 1:2:end); % 1...green
-G(2:2:end, 2:2:end) = input(2:2:end, 2:2:end); % 1...green
-
-% GBRG
-% R(1:2:end, 1:2:end) = input(1:2:end, 1:2:end); % 1...red
-% B(2:2:end, 2:2:end) = input(2:2:end, 2:2:end); % 1...blue
-% G(2:2:end, 1:2:end) = input(2:2:end, 1:2:end); % 1...green
-% G(1:2:end, 2:2:end) = input(1:2:end, 2:2:end); % 1...green
+% Bayer Pattern: GRBG
+R(1:2:end, 2:2:end) = input(1:2:end, 2:2:end);
+G(1:2:end, 1:2:end) = input(1:2:end, 1:2:end);
+G(2:2:end, 2:2:end) = input(2:2:end, 2:2:end);
+B(2:2:end, 1:2:end) = input(2:2:end, 1:2:end);
 
 end
 
@@ -93,9 +73,9 @@ function [R, G, B] = evc_transform_neutral(R, G, B, asShotNeutral)
 % NOTE: The following three lines can be removed. They prevent the framework
 %       from crashing.
 
-R = R/asShotNeutral(1);
-G = G/asShotNeutral(2);
-B = B/asShotNeutral(3);
+R = R / asShotNeutral(1);
+G = G / asShotNeutral(2);
+B = B / asShotNeutral(3);
 
 end
 
@@ -118,21 +98,21 @@ function [R, G, B] = evc_interpolate(R, G, B)
 % NOTE: The following three lines can be removed. They prevent the framework
 %       from crashing.
 
-R_Filter = [0.25, 0.5,  0.25;
+r_filter = [0.25, 0.5,  0.25;
             0.5,  1,    0.5;
             0.25, 0.5,  0.25];
 
-G_Filter = [0,    0.25, 0;
+g_filter = [0,    0.25, 0;
             0.25, 1,    0.25;
             0,    0.25, 0];
 
-B_Filter = [0.25, 0.5,  0.25;
+b_filter = [0.25, 0.5,  0.25;
             0.5,  1,    0.5;
             0.25, 0.5,  0.25];
 
-R = imfilter(R, R_Filter);
-G = imfilter(G, G_Filter);
-B = imfilter(B, B_Filter);
+R = imfilter(R, r_filter);
+G = imfilter(G, g_filter);
+B = imfilter(B, b_filter);
 
 end
 
@@ -153,6 +133,6 @@ function [result] = evc_concat(R, G, B)
 % NOTE: The following line can be removed. It prevents the framework
 %       from crashing.
 
-result = cat(3,R,G,B);
+result = cat(3, R, G, B);
 
 end

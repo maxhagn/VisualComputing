@@ -40,17 +40,17 @@ function [brightness] = evc_compute_brightness(input)
 % TODO: Implement this function.
 % HINT: The function 'rgb2gray' might be useful.
 
-maxValue = max(max(max(input)));
+max_color_value = max(max(max(input)));
 
-if maxValue <= 0
-        maxValue = 0.0000000001;
+if (max_color_value <= 0.0000000001)
+        max_color_value = 0.0000000001;
 end
 
-normalized = input .* (1/maxValue);
+normalized_image = input .* (1/max_color_value);
 
-gray = rgb2gray(normalized);
+gray_image = rgb2gray(normalized_image);
 
-brightness = gray .* maxValue;
+brightness = gray_image .* max_color_value;
 
 end
 
@@ -116,8 +116,8 @@ function [result] = evc_reconstruct(brightness_corrected, chromaticity)
 % NOTE:  The following line can be removed. It prevents the framework
 %       from crashing.
 
-brightness_gamma3 = repmat(brightness_corrected, [1 1 3]);
+brightness = repmat(brightness_corrected, [1 1 3]);
     
-result = brightness_gamma3 .* chromaticity;
+result = brightness .* chromaticity;
 
 end

@@ -33,9 +33,9 @@ function [blackLevel, asShotNeutral] = evc_read_file_info(filename)
 %NOTE:  The following two lines can be removed. They prevent the
 %       framework from crashing.
 
-info = imfinfo(filename);
-blackLevel = info.BlackLevel;
-asShotNeutral = info.AsShotNeutral;
+image_info = imfinfo(filename);
+blackLevel = image_info.BlackLevel;
+asShotNeutral = image_info.AsShotNeutral;
 
 end
 
@@ -60,7 +60,10 @@ function [result] = evc_transform_colors(input, blackLevel)
 %NOTE:  The following line can be removed. It prevents the framework
 %       from crashing.
 
-result = (double(input)-blackLevel)/(65535 - blackLevel);
-result(result<0)=0;
+max_sample_value = 65535;
+image_double = double(input);
+
+result = (image_double - blackLevel) / (max_sample_value - blackLevel);
+result(result < 0) = 0;
 
 end

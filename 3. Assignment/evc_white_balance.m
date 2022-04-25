@@ -21,28 +21,25 @@ function [result] = evc_white_balance(input, white)
 % NOTE: The following line can be removed. It prevents the framework
 %       from crashing.
 
-rScale = 1 / 0.0000000001;
-if white(1) ~= 0
-    rScale = 1 / white(1);
+r_inverse = realmax;
+g_inverse = realmax;
+b_inverse = realmax;
+
+if (not(white(1) == 0))
+    r_inverse = 1 / white(1);
 end
 
-gScale = 1 / 0.0000000001;
-if white(2) ~= 0
-    gScale = 1 / white(2);
+if (not(white(2) == 0))
+    g_inverse = 1 / white(2);
 end
 
-bScale = 1 / 0.0000000001;
-if white(3) ~= 0
-    bScale = 1 / white(3);
+if (not(white(3) == 0))
+    b_inverse = 1 / white(3);
 end
 
-R = input(:, :, 1);
-G = input(:, :, 2);
-B = input(:, :, 3);
-
-R = R * rScale;
-G = G * gScale;
-B = B * bScale;
+R = input(:, :, 1) * r_inverse;
+G = input(:, :, 2) * g_inverse;
+B = input(:, :, 3) * b_inverse;
 
 result = cat(3, R, G, B);
 
