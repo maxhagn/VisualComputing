@@ -87,7 +87,9 @@ end
 
 function[] = display_vertices(v, id, head)
 %Displays a list of vertices
-%v: list of vertices as column vectors ([x1, x2, x3, ...; y1, y2, y3, ...; 1, 1, 1, ....;)
+%v: list of vertices as column vectors ([x1, x2, x3, ...; 
+%                                        y1, y2, y3, ...; 
+%                                         1,  1,  1, ....;)
 %id: figure id
 %head: title of the figure
 

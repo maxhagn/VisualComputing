@@ -146,16 +146,20 @@ rows = size(input,1);
 cols = size(input,2);
 result = zeros(rows,cols);
 
-input=padarray(input,[1,1]);
+input=padarray(input,[2 2]);
 
 for color = 1:3 
-    for row = 3:rows
-        for col = 3:cols
+    for row = 3:rows-3
+        for col = 3:cols-3
             temp = input(row-2:row+2,col-2:col+2,color) .* kernel;
-            result(row-1,col-1,color) = sum(temp(:));
+            result(row,col,color) = sum(temp(:));
         end
     end
 end
+
+result = result(2:rows-2,2:cols-2,:);
+
+imshow(input)
 
 end
 
