@@ -38,7 +38,9 @@ display_vertices(rotated_vertices, 12, 'Rotated Quad');
 image1_vertices = transform_vertices(quad, (mtranslate(-3,0)*mrotate(55)));
 image2_vertices = transform_vertices(quad, (mrotate(55)*mtranslate(-3,0))); 
 image3_vertices = transform_vertices(quad, (mtranslate(3,1)*mrotate(70)*mscale(3,2))); 
-image4_vertices = transform_vertices(quad, (mscale(1,3)*mrotate(45))); 
+image4_vertices = transform_vertices(quad, (mtranslate(3,2)*mrotate(90)*mscale(2,1))); 
+
+fspecial("gaussian", 5, 10)
 
 display_vertices(image1_vertices, 13, 'Target Image 1');
 display_vertices(image2_vertices, 14, 'Target Image 2');
