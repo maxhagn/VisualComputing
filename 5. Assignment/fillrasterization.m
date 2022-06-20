@@ -68,6 +68,59 @@ if a ~= 0
     % BONUS:  Solve this task without using loops and without using loop
     %         emulating functions (e.g. arrayfun).
 
+    edgeOne = [x3; y3] - [x2; y2];
+    normalEdgeOne = [-edgeOne(2), edgeOne(1)];
+    edgeTwo = [x1; y1] - [x3; y3];
+    normalEdgeTwo = [-edgeTwo(2), edgeTwo(1)];
+    edgeThree = [x2; y2] - [x1; y1];
+    normalEdgeThree = [-edgeThree(2), edgeThree(1)];
+    
+    aOne = normalEdgeOne(1);
+    bOne = normalEdgeOne(2);
+    cOne = -(aOne * x2 + bOne * y2);
+    
+    aTwo = normalEdgeTwo(1);
+    bTwo = normalEdgeTwo(2);
+    cTwo = -(aTwo * x3 + bTwo * y3);
+    
+    aThree = normalEdgeThree(1);
+    bThree = normalEdgeThree(2);
+    cThree = -(aThree * x1 + bThree * y1);
+    
+    vxMin = min([x1, x2, x3], [], 'all');
+    vyMin = min([y1, y2, y3], [], 'all');
+    vxMax = max([x1, x2, x3], [], 'all');
+    vyMax = max([y1, y2, y3], [], 'all');
+    
+    boundingWidth = vxMax - vxMin;
+    boundingHeight = vyMax - vyMin;
+    
+    barycentricConstOne = 1 / lineEq(aOne, bOne, cOne, x1, y1);
+    barycentricConstTwo = 1 / lineEq(aTwo, bTwo, cTwo, x2, y2);
+    barycentricConstThree = 1 / lineEq(aThree, bThree, cThree, x3, y3);
+        
+    for currX = vxMin:(vxMin + boundingWidth)
+        for currY = vyMin:(vyMin + boundingHeight)
+            
+            distOne = lineEq(aOne, bOne, cOne, currX, currY);
+            distTwo = lineEq(aTwo, bTwo, cTwo, currX, currY);
+            distThree = lineEq(aThree, bThree, cThree, currX, currY);
+            
+            if distOne <= 0 && distTwo <= 0 && distThree <= 0
+                
+                alpha = lineEq(aOne, bOne, cOne, currX, currY) * barycentricConstOne;
+                beta = lineEq(aTwo, bTwo, cTwo, currX, currY) * barycentricConstTwo;
+                gamma = lineEq(aThree, bThree, cThree, currX, currY) * barycentricConstThree;
+                
+                newColor = MeshVertex.barycentricMix(col1, col2, col3, alpha, beta, gamma);
+                newDepth = MeshVertex.barycentricMix(depth1, depth2, depth3, alpha, beta, gamma);
+                
+                framebuffer.setPixel(currX, currY, newDepth, newColor);
+                
+            end
+        end
+    end
+
 end
 end
 
@@ -85,6 +138,6 @@ function res = lineEq(A, B, C, x, y)
 % NOTE:     The following lines can be removed. They prevent the framework
 %           from crashing.
 
-res = 0;
+res = A * x + B * y + C;
 
 end

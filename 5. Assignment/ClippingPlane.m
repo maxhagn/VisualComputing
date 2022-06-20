@@ -38,7 +38,7 @@ classdef ClippingPlane < handle
             % NOTE:   The following lines can be removed. They prevent the framework
             %         from crashing.
 
-            ret = 0;
+            ret = dot(position, obj.plane) <= 0;
 
         end
 
@@ -53,7 +53,18 @@ classdef ClippingPlane < handle
             % NOTE:   The following lines can be removed. They prevent the framework
             %         from crashing.
 
-            ret = 0;
+            la = dot(pos1, obj.plane);
+            lb = dot(pos2, obj.plane);
+            
+            normalizedIntersection = la / (la - lb);
+            
+            if inside(obj, pos1)
+                normalizedIntersection = normalizedIntersection - 10^(-6);
+            elseif inside(obj, pos2)
+                normalizedIntersection = normalizedIntersection + 10^(-6);
+            end
+            
+            ret = normalizedIntersection; 
 
         end
     end
@@ -68,12 +79,12 @@ classdef ClippingPlane < handle
             % NOTE:   The following lines can be removed. They prevent the framework
             %         from crashing.
 
-            ret(6) = ClippingPlane([0, 0, 0, 0]);
-            ret(5) = ClippingPlane([0, 0, 0, 0]);
-            ret(4) = ClippingPlane([0, 0, 0, 0]);
-            ret(3) = ClippingPlane([0, 0, 0, 0]);
-            ret(2) = ClippingPlane([0, 0, 0, 0]);
-            ret(1) = ClippingPlane([0, 0, 0, 0]);
+            ret(6) = ClippingPlane([0, 0, -1, -1]); % Front (x=0, y=0, z=-1, distance=1)
+            ret(5) = ClippingPlane([-1, 0, 0, -1]); % Left (x=-1, y=0, z=0, distance=1)
+            ret(4) = ClippingPlane([0, -1, 0, -1]); % Bottom (x=0, y=-1, z=0, distance=1)
+            ret(3) = ClippingPlane([1, 0, 0, -1]); % Right (x=1, y=0, z=0, distance=1)
+            ret(2) = ClippingPlane([0, 1, 0, -1]); % Top (x=0, y=1, z=0, distance=1)
+            ret(1) = ClippingPlane([0, 0, 1, -1]); % Back (x=0, y=0, z=1, distance=1)
 
         end
 

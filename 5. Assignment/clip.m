@@ -44,9 +44,6 @@ function [vertex_count_clipped, pos_clipped, col_clipped] = clipPlane(vertex_cou
 %     col_clipped           ... n x 3 matrix with colors of n clipped vertices
 %                               one row corresponds to one vertex color
 
-pos_clipped = zeros(vertex_count+1, 4);
-col_clipped = zeros(vertex_count+1, 3);
-
 % TODO 2:   Implement this function.
 % HINT 1: 	Read the article about Sutherland Hodgman algorithm on Wikipedia.
 %           https://en.wikipedia.org/wiki/Sutherland%E2%80%93Hodgman_algorithm
@@ -57,8 +54,59 @@ col_clipped = zeros(vertex_count+1, 3);
 % NOTE:     The following lines can be removed. They prevent the framework
 %           from crashing.
 
-vertex_count_clipped = vertex_count;
-pos_clipped = positions;
-col_clipped = colors;
+new_pos_clipped = zeros(0, 4);
+new_col_clipped = zeros(0, 3);
+new_vertex_count_clipped = 0;
+
+if vertex_count > 0
+    currentVertex = positions(vertex_count, :);
+    currentColor = colors(vertex_count, :);
+
+    for i = 1:vertex_count
+        nextVertex = positions(i, :);
+        nextColor = colors(i, :);
+        if clipping_plane.inside(currentVertex) && clipping_plane.inside(nextVertex)
+            % Both vertices are inside
+
+            new_pos_clipped = [new_pos_clipped; nextVertex];
+            new_col_clipped = [new_col_clipped; nextColor];
+
+            new_vertex_count_clipped = new_vertex_count_clipped + 1;
+        elseif clipping_plane.inside(nextVertex)
+            % End vertex is inside
+
+            intersection = clipping_plane.intersect(currentVertex, nextVertex);
+            newIntersectionVertex = MeshVertex.mix(currentVertex, nextVertex, intersection); % Get new vertex with intersectionValue
+
+            new_pos_clipped = [new_pos_clipped; newIntersectionVertex];
+            new_col_clipped = [new_col_clipped; MeshVertex.mix(currentColor, nextColor, intersection)];
+
+            new_pos_clipped = [new_pos_clipped; nextVertex];
+            new_col_clipped = [new_col_clipped; nextColor];
+
+            new_vertex_count_clipped = new_vertex_count_clipped + 2;
+        elseif clipping_plane.inside(currentVertex)
+            % Start vertex is inside
+
+            intersection = clipping_plane.intersect(currentVertex, nextVertex);
+            newIntersectionVertex = MeshVertex.mix(currentVertex, nextVertex, intersection); % Get new vertex with intersectionValue
+
+            new_pos_clipped = [new_pos_clipped; newIntersectionVertex];
+            new_col_clipped = [new_col_clipped; MeshVertex.mix(currentColor, nextColor, intersection)];
+
+            new_vertex_count_clipped = new_vertex_count_clipped + 1;
+        else
+            % Both vertices are outside
+            % Nothing to do here
+        end
+        
+        currentVertex = nextVertex;
+        currentColor = nextColor;
+    end
+end
+
+pos_clipped = new_pos_clipped;
+col_clipped = new_col_clipped;
+vertex_count_clipped = new_vertex_count_clipped;
 
 end
