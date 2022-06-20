@@ -54,59 +54,54 @@ function [vertex_count_clipped, pos_clipped, col_clipped] = clipPlane(vertex_cou
 % NOTE:     The following lines can be removed. They prevent the framework
 %           from crashing.
 
-new_pos_clipped = zeros(0, 4);
-new_col_clipped = zeros(0, 3);
-new_vertex_count_clipped = 0;
+pos_clipped = zeros(0, 4);
+col_clipped = zeros(0, 3);
+vertex_count_clipped = 0;
 
-if vertex_count > 0
-    currentVertex = positions(vertex_count, :);
-    currentColor = colors(vertex_count, :);
+if (vertex_count > 0)
+
+    current_vertex = positions(vertex_count, :);
+    current_color = colors(vertex_count, :);
 
     for i = 1:vertex_count
-        nextVertex = positions(i, :);
-        nextColor = colors(i, :);
-        if clipping_plane.inside(currentVertex) && clipping_plane.inside(nextVertex)
-            % Both vertices are inside
 
-            new_pos_clipped = [new_pos_clipped; nextVertex];
-            new_col_clipped = [new_col_clipped; nextColor];
+        next_vertex = positions(i, :);
+        next_color = colors(i, :);
 
-            new_vertex_count_clipped = new_vertex_count_clipped + 1;
-        elseif clipping_plane.inside(nextVertex)
-            % End vertex is inside
+        if (clipping_plane.inside(current_vertex) && clipping_plane.inside(next_vertex))
 
-            intersection = clipping_plane.intersect(currentVertex, nextVertex);
-            newIntersectionVertex = MeshVertex.mix(currentVertex, nextVertex, intersection); % Get new vertex with intersectionValue
+            pos_clipped = [pos_clipped; next_vertex];
+            col_clipped = [col_clipped; next_color];
 
-            new_pos_clipped = [new_pos_clipped; newIntersectionVertex];
-            new_col_clipped = [new_col_clipped; MeshVertex.mix(currentColor, nextColor, intersection)];
+            vertex_count_clipped = vertex_count_clipped + 1;
 
-            new_pos_clipped = [new_pos_clipped; nextVertex];
-            new_col_clipped = [new_col_clipped; nextColor];
+        elseif (clipping_plane.inside(current_vertex))
 
-            new_vertex_count_clipped = new_vertex_count_clipped + 2;
-        elseif clipping_plane.inside(currentVertex)
-            % Start vertex is inside
+            intersection = clipping_plane.intersect(current_vertex, next_vertex);
 
-            intersection = clipping_plane.intersect(currentVertex, nextVertex);
-            newIntersectionVertex = MeshVertex.mix(currentVertex, nextVertex, intersection); % Get new vertex with intersectionValue
+            pos_clipped = [pos_clipped; MeshVertex.mix(current_vertex, next_vertex, intersection)];
+            col_clipped = [col_clipped; MeshVertex.mix(current_color, next_color, intersection)];
 
-            new_pos_clipped = [new_pos_clipped; newIntersectionVertex];
-            new_col_clipped = [new_col_clipped; MeshVertex.mix(currentColor, nextColor, intersection)];
+            vertex_count_clipped = vertex_count_clipped + 1;
 
-            new_vertex_count_clipped = new_vertex_count_clipped + 1;
-        else
-            % Both vertices are outside
-            % Nothing to do here
+        elseif (clipping_plane.inside(next_vertex))
+
+            intersection = clipping_plane.intersect(current_vertex, next_vertex);
+
+            pos_clipped = [pos_clipped; MeshVertex.mix(current_vertex, next_vertex, intersection)];
+            col_clipped = [col_clipped; MeshVertex.mix(current_color, next_color, intersection)];
+
+            pos_clipped = [pos_clipped; next_vertex];
+            col_clipped = [col_clipped; next_color];
+
+            vertex_count_clipped = vertex_count_clipped + 2;
+
         end
         
-        currentVertex = nextVertex;
-        currentColor = nextColor;
+        current_vertex = next_vertex;
+        current_color = next_color;
+
     end
 end
-
-pos_clipped = new_pos_clipped;
-col_clipped = new_col_clipped;
-vertex_count_clipped = new_vertex_count_clipped;
 
 end

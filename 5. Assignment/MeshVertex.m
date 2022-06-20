@@ -76,7 +76,7 @@ classdef MeshVertex < handle
             % NOTE:     The following lines can be removed. They prevent the
             %           framework from crashing.
 
-            res = a;
+            res = a * (1 - t) + b * t;
 
         end
 
@@ -96,7 +96,7 @@ classdef MeshVertex < handle
             % NOTE:     The following lines can be removed. They prevent the
             %           framework from crashing.
 
-            res = a;
+            res = alpha * a + beta * b + gamma * c;
 
         end
 

@@ -30,63 +30,60 @@ function drawLine(framebuffer, v1, v2)
 
 % TODO 1: Implement this function.
 
-distanceX = x2 - x1;
-distanceY = y2 - y1;
+color_1 = v1.getColor();
+color_2 = v2.getColor();
 
+dx = x2 - x1;
+dy = y2 - y1;
 
+sdx = sign(dx);
+sdy = sign(dy);
 
+adx = abs(dx);
+ady = abs(dy);
 
-incrementX = sign(distanceX);
-incrementY = sign(distanceY);
-
-if distanceX < 0 % x1 > x2
-    distanceX = abs(distanceX);
-end
-if distanceY < 0 % y1 > y2
-    distanceY = abs(distanceY);
-end
-
-if distanceX > distanceY
-    shiftX = incrementX;
-    shiftY = 0;
-    ddx = incrementX;
-    ddy = incrementY;
-    slowDirection = distanceY;
-    fastDirection = distanceX;
+if (adx > ady)
+    pdx = sdx;
+    pdy = 0;
+    ddx = sdx;
+    ddy = sdy;
+    delta_slow_direction = ady;
+    delta_fast_direction = adx;
 else
-    shiftX = 0;
-    shiftY = incrementY;
-    ddx = incrementX;
-    ddy = incrementY;
-    slowDirection = distanceX;
-    fastDirection = distanceY;
+    pdx = 0;
+    pdy = sdy;
+    ddx = sdx;
+    ddy = sdy;
+    delta_slow_direction = adx;
+    delta_fast_direction = ady;
 end
 
-xValue = x1;
-yValue = y1;
-error = fastDirection/2; % Anfangswert
-framebuffer.setPixel(xValue,yValue,MeshVertex.mix(depth1,depth2,0.5),MeshVertex.mix(v1.getColor(),v2.getColor(),0.5))
+x = x1;
+y = y1;
 
+error = delta_fast_direction / 2;
 
-for i = 1:fastDirection
-    error = error - slowDirection;
+interpolation_factor = 0;
 
-    if error < 0
-        error = error + fastDirection;
-        xValue = xValue + ddx;
-        yValue = yValue + ddy;
+framebuffer.setPixel(x, y, MeshVertex.mix(depth1, depth2, interpolation_factor),MeshVertex.mix(color_1, color_2, interpolation_factor))
+
+for i = 1:delta_fast_direction
+
+    error = error - delta_slow_direction;
+
+    if (error < 0)
+        error = error + delta_fast_direction;
+        x = x + ddx;
+        y = y + ddy;
         
     else
-        xValue = xValue + shiftX;
-        yValue = yValue + shiftY;
+        x = x + pdx;
+        y = y + pdy;
     end
 
-    %ACHTUNG: Dieser Koeffizient t kann ausschließlich Werte aus dem abgeschlossenen Intervall [0, 1] annehmen.
-    % Um diesen Koeffizienten zu berechnen, kann die Strecke zwischen dem ersten Endpunkt und dem aktuell zu rasterisierenden Pixel 
-    % durch die Gesamtstrecke der Linie dividiert werden. Das Ergebnis beschreibt dann die normalisierte Distanz des aktuellen Pixels vom ersten Endpunkt.
-    farbe = (sqrt((x1-xValue)^2 + (y1-yValue)^2) / sqrt((x1-x2)^2+(y1-y2)^2) );
-    framebuffer.setPixel(xValue,yValue,MeshVertex.mix(depth1,depth2,farbe),MeshVertex.mix(v1.getColor(),v2.getColor(),farbe))
+    interpolation_factor = interpolation_factor + 1 / delta_fast_direction;
 
+    framebuffer.setPixel(x, y, MeshVertex.mix(depth1, depth2, interpolation_factor), MeshVertex.mix(color_1, color_2, interpolation_factor))
 
 end
 
